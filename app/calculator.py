@@ -16,6 +16,7 @@ from app.calculator_memento import CalculatorMemento
 from app.exceptions import OperationError, ValidationError
 from app.history import HistoryObserver
 from app.input_validators import InputValidator
+from app.logger import Logger
 from app.operations import Operation
 
 # Type aliases for better readability
@@ -93,12 +94,7 @@ class Calculator:
             log_file = self.config.log_file.resolve()
 
             # Configure the basic logging settings
-            logging.basicConfig(
-                filename=str(log_file),
-                level=logging.INFO,
-                format='%(asctime)s - %(levelname)s - %(message)s',
-                force=True  # Overwrite any existing logging configuration
-            )
+            Logger.configure(log_file)
             logging.info(f"Logging initialized at: {log_file}")
         except Exception as e:
             # Print an error message and re-raise the exception if logging setup fails
