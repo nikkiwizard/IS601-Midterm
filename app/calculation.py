@@ -61,6 +61,7 @@ class Calculation:
             "Multiplication": lambda x, y: x * y,
             "Division": lambda x, y: x / y if y != 0 else self._raise_div_zero(),
             "Modulus": lambda x, y: x % y if y != 0 else self._raise_div_zero(),
+            "IntegerDivision": lambda x, y: x // y if y != 0 else self._raise_div_zero(),
             "Power": lambda x, y: Decimal(pow(float(x), float(y))) if y >= 0 else self._raise_neg_power(),
             "Root": lambda x, y: (
                 Decimal(pow(float(x), 1 / float(y))) 
