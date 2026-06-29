@@ -14,6 +14,7 @@ from app.operations import (
     Modulus,
     IntegerDivision,
     Percentage,
+    AbsoluteDifference,
     OperationFactory,
 )
 
@@ -244,6 +245,19 @@ class TestPercentage(BaseOperationTest):
     }
 
 
+class TestAbsoluteDifference(BaseOperationTest):
+    """Test AbsoluteDifference operation."""
+
+    operation_class = AbsoluteDifference
+    valid_test_cases = {
+        "positive_difference": {"a": "8", "b": "3", "expected": "5"},
+        "negative_difference": {"a": "3", "b": "8", "expected": "5"},
+        "equal_values": {"a": "5", "b": "5", "expected": "0"},
+        "decimal_values": {"a": "5.5", "b": "2.25", "expected": "3.25"},
+    }
+    invalid_test_cases = {}
+
+
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 
@@ -259,6 +273,7 @@ class TestOperationFactory:
             'modulus': Modulus,
             'integer_division': IntegerDivision,
             'percentage': Percentage,
+            'absolute_difference': AbsoluteDifference,
         }
 
         for op_name, op_class in operation_map.items():

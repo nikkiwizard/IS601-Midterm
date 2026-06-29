@@ -285,6 +285,28 @@ class Percentage(Operation):
         return (a / b) * Decimal('100')
 
 
+class AbsoluteDifference(Operation):
+    """
+    Absolute difference operation implementation.
+
+    Calculates the absolute difference between two numbers.
+    """
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Compute the absolute difference between two numbers.
+
+        Args:
+            a (Decimal): First number.
+            b (Decimal): Second number.
+
+        Returns:
+            Decimal: Absolute value of the difference.
+        """
+        self.validate_operands(a, b)
+        return abs(a - b)
+
+
 class Power(Operation):
     """
     Power (exponentiation) operation implementation.
@@ -384,6 +406,7 @@ class OperationFactory:
         'modulus': Modulus,
         'integer_division': IntegerDivision,
         'percentage': Percentage,
+        'absolute_difference': AbsoluteDifference,
         'power': Power,
         'root': Root
     }
