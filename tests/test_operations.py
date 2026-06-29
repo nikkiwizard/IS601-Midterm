@@ -258,6 +258,19 @@ class TestAbsoluteDifference(BaseOperationTest):
     invalid_test_cases = {}
 
 
+@pytest.mark.parametrize(
+    ("command_name", "expected_class"),
+    [
+        ("int_divide", IntegerDivision),
+        ("percent", Percentage),
+        ("abs_diff", AbsoluteDifference),
+    ],
+)
+def test_operation_factory_supports_required_aliases(command_name, expected_class):
+    operation = OperationFactory.create_operation(command_name)
+    assert isinstance(operation, expected_class)
+
+
 class TestOperationFactory:
     """Test OperationFactory functionality."""
 

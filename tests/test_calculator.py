@@ -172,6 +172,10 @@ def test_calculator_repl_exit(mock_print, mock_input):
 def test_calculator_repl_help(mock_print, mock_input):
     calculator_repl()
     mock_print.assert_any_call("\nAvailable commands:")
+    printed_output = "\n".join(str(call.args[0]) for call in mock_print.call_args_list if call.args)
+    assert "int_divide" in printed_output
+    assert "percent" in printed_output
+    assert "abs_diff" in printed_output
 
 @patch('builtins.input', side_effect=['add', '2', '3', 'exit'])
 @patch('builtins.print')
