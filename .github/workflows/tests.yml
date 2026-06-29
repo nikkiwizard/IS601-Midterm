@@ -1,0 +1,41 @@
+name: Run Tests on Push or Pull Request to Main
+
+on:
+  push:
+    branches:
+      - main  # Run tests on any push to the main branch
+  pull_request:
+    branches:
+      - main  # Run tests on any pull request to the main branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Create virtualenv & upgrade pip
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install dependencies
+        run: .venv/bin/pip install -r requirements.txt
+
+      - name: Run tests with pytest and enforce 70% coverage
+        run: .venv/bin/pytest --cov=app --cov-fail-under=70
