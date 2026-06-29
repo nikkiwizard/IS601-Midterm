@@ -246,6 +246,45 @@ class IntegerDivision(Operation):
         return a // b
 
 
+class Percentage(Operation):
+    """
+    Percentage operation implementation.
+
+    Computes the percentage of one number with respect to another.
+    """
+
+    def validate_operands(self, a: Decimal, b: Decimal) -> None:
+        """
+        Validate operands, checking for division by zero.
+
+        Overrides the base class method to ensure that the divisor is not zero.
+
+        Args:
+            a (Decimal): Numerator.
+            b (Decimal): Denominator.
+
+        Raises:
+            ValidationError: If the denominator is zero.
+        """
+        super().validate_operands(a, b)
+        if b == 0:
+            raise ValidationError("Division by zero is not allowed")
+
+    def execute(self, a: Decimal, b: Decimal) -> Decimal:
+        """
+        Calculate the percentage of one number with respect to another.
+
+        Args:
+            a (Decimal): Numerator.
+            b (Decimal): Denominator.
+
+        Returns:
+            Decimal: Percentage value computed as (a / b) * 100.
+        """
+        self.validate_operands(a, b)
+        return (a / b) * Decimal('100')
+
+
 class Power(Operation):
     """
     Power (exponentiation) operation implementation.
@@ -344,6 +383,7 @@ class OperationFactory:
         'divide': Division,
         'modulus': Modulus,
         'integer_division': IntegerDivision,
+        'percentage': Percentage,
         'power': Power,
         'root': Root
     }
