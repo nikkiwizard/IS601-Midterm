@@ -3,7 +3,6 @@
 ########################
 
 from decimal import Decimal
-import logging
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -77,10 +76,10 @@ class Calculator:
             self.load_history()
         except Exception as e:
             # Log a warning if history could not be loaded
-            logging.warning(f"Could not load existing history: {e}")
+            Logger.warning(f"Could not load existing history: {e}")
 
         # Log the successful initialization of the calculator
-        logging.info("Calculator initialized with configuration")
+        Logger.info("Calculator initialized with configuration")
 
     def _setup_logging(self) -> None:
         """
@@ -95,7 +94,7 @@ class Calculator:
 
             # Configure the basic logging settings
             Logger.configure(log_file)
-            logging.info(f"Logging initialized at: {log_file}")
+            Logger.info(f"Logging initialized at: {log_file}")
         except Exception as e:
             # Print an error message and re-raise the exception if logging setup fails
             print(f"Error setting up logging: {e}")
@@ -120,7 +119,7 @@ class Calculator:
             observer (HistoryObserver): The observer to be added.
         """
         self.observers.append(observer)
-        logging.info(f"Added observer: {observer.__class__.__name__}")
+        Logger.info(f"Added observer: {observer.__class__.__name__}")
 
     def remove_observer(self, observer: HistoryObserver) -> None:
         """
@@ -132,7 +131,7 @@ class Calculator:
             observer (HistoryObserver): The observer to be removed.
         """
         self.observers.remove(observer)
-        logging.info(f"Removed observer: {observer.__class__.__name__}")
+        Logger.info(f"Removed observer: {observer.__class__.__name__}")
 
     def notify_observers(self, calculation: Calculation) -> None:
         """
@@ -159,7 +158,7 @@ class Calculator:
             operation (Operation): The operation strategy to be set.
         """
         self.operation_strategy = operation
-        logging.info(f"Set operation: {operation}")
+        Logger.info(f"Set operation: {operation}")
 
     def perform_operation(
         self,
@@ -221,11 +220,11 @@ class Calculator:
 
         except ValidationError as e:
             # Log and re-raise validation errors
-            logging.error(f"Validation error: {str(e)}")
+            Logger.error(f"Validation error: {str(e)}")
             raise
         except Exception as e:
             # Log and raise operation errors for any other exceptions
-            logging.error(f"Operation failed: {str(e)}")
+            Logger.error(f"Operation failed: {str(e)}")
             raise OperationError(f"Operation failed: {str(e)}")
 
     def save_history(self) -> None:
@@ -258,16 +257,16 @@ class Calculator:
                 df = pd.DataFrame(history_data)
                 # Write the DataFrame to a CSV file without the index
                 df.to_csv(self.config.history_file, index=False)
-                logging.info(f"History saved successfully to {self.config.history_file}")
+                Logger.info(f"History saved successfully to {self.config.history_file}")
             else:
                 # If history is empty, create an empty CSV with headers
                 pd.DataFrame(columns=['operation', 'operand1', 'operand2', 'result', 'timestamp']
                            ).to_csv(self.config.history_file, index=False)
-                logging.info("Empty history saved")
+                Logger.info("Empty history saved")
 
         except Exception as e:
             # Log and raise an OperationError if saving fails
-            logging.error(f"Failed to save history: {e}")
+            Logger.error(f"Failed to save history: {e}")
             raise OperationError(f"Failed to save history: {e}")
 
     def load_history(self) -> None:
@@ -296,15 +295,15 @@ class Calculator:
                         })
                         for _, row in df.iterrows()
                     ]
-                    logging.info(f"Loaded {len(self.history)} calculations from history")
+                    Logger.info(f"Loaded {len(self.history)} calculations from history")
                 else:
-                    logging.info("Loaded empty history file")
+                    Logger.info("Loaded empty history file")
             else:
                 # If no history file exists, start with an empty history
-                logging.info("No history file found - starting with empty history")
+                Logger.info("No history file found - starting with empty history")
         except Exception as e:
             # Log and raise an OperationError if loading fails
-            logging.error(f"Failed to load history: {e}")
+            Logger.error(f"Failed to load history: {e}")
             raise OperationError(f"Failed to load history: {e}")
 
     def get_history_dataframe(self) -> pd.DataFrame:
@@ -351,7 +350,7 @@ class Calculator:
         self.history.clear()
         self.undo_stack.clear()
         self.redo_stack.clear()
-        logging.info("History cleared")
+        Logger.info("History cleared")
 
     def undo(self) -> bool:
         """

@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch, PropertyMock
 from decimal import Decimal
 from tempfile import TemporaryDirectory
 from app.calculator import Calculator
-from app.calculator_repl import calculator_repl
+from app.calculator_repl import calculator_repl, format_message
 from app.calculator_config import CalculatorConfig
 from app.exceptions import OperationError, ValidationError
 from app.history import LoggingObserver, AutoSaveObserver
@@ -44,7 +44,7 @@ def test_calculator_initialization(calculator):
 
 # Test Logging Setup
 
-@patch('app.calculator.logging.info')
+@patch('app.calculator.Logger.info')
 def test_logging_setup(logging_info_mock):
     with patch.object(CalculatorConfig, 'log_dir', new_callable=PropertyMock) as mock_log_dir, \
          patch.object(CalculatorConfig, 'log_file', new_callable=PropertyMock) as mock_log_file:
@@ -155,6 +155,19 @@ def test_clear_history(calculator):
     assert calculator.history == []
     assert calculator.undo_stack == []
     assert calculator.redo_stack == []
+
+def test_format_message_uses_expected_color_styles():
+    from colorama import Back, Fore, Style
+
+    instruction = format_message("Instructions", "instruction")
+    error = format_message("Error", "error")
+    result = format_message("Result", "result")
+    prompt = format_message("Input", "input")
+
+    assert instruction.startswith(f"{Style.BRIGHT}{Fore.BLACK}{Back.WHITE}")
+    assert error.startswith(f"{Style.BRIGHT}{Fore.RED}")
+    assert result.startswith(f"{Style.BRIGHT}{Fore.GREEN}")
+    assert prompt.startswith(f"{Back.WHITE}{Fore.BLUE}")
 
 # Test REPL Commands (using patches for input/output handling)
 

@@ -14,7 +14,7 @@ calculation_mock.result = 8
 
 # Test cases for LoggingObserver
 
-@patch('logging.info')
+@patch('app.history.Logger.info')
 def test_logging_observer_logs_calculation(logging_info_mock):
     observer = LoggingObserver()
     observer.update(calculation_mock)
@@ -38,7 +38,7 @@ def test_autosave_observer_triggers_save():
     observer.update(calculation_mock)
     calculator_mock.save_history.assert_called_once()
 
-@patch('logging.info')
+@patch('app.history.Logger.info')
 def test_autosave_observer_logs_autosave(logging_info_mock):
     calculator_mock = Mock(spec=Calculator)
     calculator_mock.config = Mock(spec=CalculatorConfig)
