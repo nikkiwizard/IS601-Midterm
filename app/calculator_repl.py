@@ -58,13 +58,13 @@ def format_message(message: str, message_type: str = "instruction") -> str:
         return message
 
     if message_type == "instruction":
-        return f"{Style.BRIGHT}{Fore.BLACK}{Back.WHITE}{message}{Style.RESET_ALL}"
+        return f"{Style.NORMAL}{Fore.BLACK}{Back.WHITE}{message}{Style.RESET_ALL}"
     if message_type == "error":
-        return f"{Style.BRIGHT}{Fore.RED}{Back.BLACK}{message}{Style.RESET_ALL}"
+        return f"{Style.NORMAL}{Fore.BLACK}{Back.RED}{message}{Style.RESET_ALL}"
     if message_type == "result":
-        return f"{Style.BRIGHT}{Fore.GREEN}{Back.BLACK}{message}{Style.RESET_ALL}"
+        return f"{Style.NORMAL}{Fore.BLACK}{Back.GREEN}{message}{Style.RESET_ALL}"
     if message_type == "input":
-        return f"{Style.BRIGHT}{Back.WHITE}{Fore.BLUE}{message}{Style.RESET_ALL}"
+        return f"{Style.DIM}{Back.CYAN}{Fore.YELLOW}{message}{Style.RESET_ALL}"
     return message
 
 
@@ -109,7 +109,7 @@ def calculator_repl():  # pragma: no cover
                     # Attempt to save history before exiting
                     try:
                         calc.save_history()
-                        print(format_message("History saved successfully.", "instruction"))
+                        print(format_message("History saved successfully.", "result"))
                     except Exception as e:
                         print(format_message(f"Warning: Could not save history: {e}", "error"))
                     print(format_message("Goodbye!", "instruction"))
