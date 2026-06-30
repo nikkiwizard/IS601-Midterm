@@ -92,12 +92,6 @@ Run the full test suite:
 pytest
 ```
 
-Run tests with coverage enforcement:
-
-```bash
-pytest --cov=app --cov-fail-under=90
-```
-
 ## CI/CD
 
 GitHub Actions is configured in [.github/workflows/tests.yml](.github/workflows/tests.yml) to run the test suite and enforce 90% coverage on pushes and pull requests to the main branch.
@@ -110,3 +104,12 @@ The codebase includes docstrings and comments throughout the main modules for re
 - [Python Downloads](https://www.python.org/downloads/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [GitHub SSH Setup Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+
+## Are you having issues?
+
+I had issues getting the colorama colors to show in the terminal. While colorama is listed in the requirements file,
+a quick fix is running 
+```bash
+python -m pip install colorama
+```
+locally. Please feel free to reach out with any other issues.
