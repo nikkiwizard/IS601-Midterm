@@ -164,10 +164,10 @@ def test_format_message_uses_expected_color_styles():
     result = format_message("Result", "result")
     prompt = format_message("Input", "input")
 
-    assert instruction.startswith(f"{Style.BRIGHT}{Fore.BLACK}{Back.WHITE}")
-    assert error.startswith(f"{Style.BRIGHT}{Fore.RED}")
-    assert result.startswith(f"{Style.BRIGHT}{Fore.GREEN}")
-    assert prompt.startswith(f"{Back.WHITE}{Fore.BLUE}")
+    assert instruction.startswith(f"{Style.NORMAL}{Fore.BLACK}{Back.WHITE}")
+    assert error.startswith(f"{Style.NORMAL}{Fore.BLACK}{Back.RED}")
+    assert result.startswith(f"{Style.NORMAL}{Fore.BLACK}{Back.GREEN}")
+    assert prompt.startswith(f"{Style.DIM}{Back.CYAN}{Fore.YELLOW}")
 
 # Test REPL Commands (using patches for input/output handling)
 
@@ -177,14 +177,14 @@ def test_calculator_repl_exit(mock_print, mock_input):
     with patch('app.calculator.Calculator.save_history') as mock_save_history:
         calculator_repl()
         mock_save_history.assert_called_once()
-        mock_print.assert_any_call("History saved successfully.")
-        mock_print.assert_any_call("Goodbye!")
+        mock_print.assert_any_call(format_message("History saved successfully.", "result"))
+        mock_print.assert_any_call(format_message("Goodbye!", "instruction"))
 
 @patch('builtins.input', side_effect=['help', 'exit'])
 @patch('builtins.print')
 def test_calculator_repl_help(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("\nAvailable commands:")
+    mock_print.assert_any_call(format_message("Available commands:", "instruction"))
     printed_output = "\n".join(str(call.args[0]) for call in mock_print.call_args_list if call.args)
     assert "int_divide" in printed_output
     assert "percent" in printed_output
@@ -194,4 +194,4 @@ def test_calculator_repl_help(mock_print, mock_input):
 @patch('builtins.print')
 def test_calculator_repl_addition(mock_print, mock_input):
     calculator_repl()
-    mock_print.assert_any_call("\nResult: 5")
+    mock_print.assert_any_call(format_message("\nResult: 5", "result"))
